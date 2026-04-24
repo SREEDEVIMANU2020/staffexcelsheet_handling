@@ -1,0 +1,49 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('admin-dashboard/', views.admin_dashboard, name="admin_dashboard"),
+    path('consultant-dashboard/', views.consultant_dashboard, name="consultant_dashboard"),
+    #path('upload/', views.upload_excel, name="upload_excel"),
+    #path("create-sheet/", views.create_sheet, name="create_sheet"),
+    path("sheet/<int:sheet_id>/", views.view_sheet, name="view_sheet"),
+    #path("sheet/<int:sheet_id>/add-row/", views.add_row, name="add_row"),
+    path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
+    #path("admin-view-sheet/<int:sheet_id>/", views.admin_view_sheet, name="admin_view_sheet"),
+    #path("admin-delete-sheet/<int:sheet_id>/", views.admin_delete_sheet, name="admin_delete_sheet"),
+    path("download-sheet/<int:sheet_id>/", views.download_sheet_excel, name="download_sheet_excel"),
+   # path("consultant-dashboard/", views.consultant_dashboard, name="consultant_dashboard"),
+   # path("create-sheet/", views.create_sheet, name="create_sheet"),
+    path("view-sheet/<int:sheet_id>/", views.view_sheet, name="view_sheet"),
+    path("delete-sheet/<int:sheet_id>/", views.delete_sheet, name="delete_sheet"),
+    path("save-sheet/<int:sheet_id>/", views.save_sheet_data, name="save_sheet_data"),
+    path("consultant-dashboard/", views.consultant_dashboard, name="consultant_dashboard"),
+    #path("create-sheet/", views.create_sheet, name="create_sheet"),
+    path("view-sheet/<int:sheet_id>/", views.view_sheet, name="view_sheet"),
+    path("save-sheet/<int:sheet_id>/", views.save_sheet_data, name="save_sheet_data"),
+    path("view-sheet/<int:sheet_id>/", views.view_sheet, name="view_sheet"),
+     path("create-student-sheet/", views.create_student_sheet, name="create_student_sheet"),
+    path("create-attendance-sheet/", views.create_attendance_sheet, name="create_attendance_sheet"),
+    path("create-completed-sheet/", views.create_completed_sheet, name="create_completed_sheet"),
+    path("save-sheet-data/<int:sheet_id>/", views.save_sheet_data, name="save_sheet_data"),
+
+    path("consultant/", views.consultant_dashboard, name="consultant_dashboard"),
+    path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
+
+    path("create-student-sheet/", views.create_student_sheet, name="create_student_sheet"),
+    path("create-attendance-sheet/", views.create_attendance_sheet, name="create_attendance_sheet"),
+    path("create-completed-sheet/", views.create_completed_sheet, name="create_completed_sheet"),
+
+    path("view/<int:sheet_id>/", views.view_sheet, name="view_sheet"),
+    path("delete/<int:sheet_id>/", views.delete_sheet, name="delete_sheet"),
+    path("save/<int:sheet_id>/", views.save_sheet_data, name="save_sheet_data"),
+
+    path("download/<int:sheet_id>/", views.download_sheet_excel, name="download_sheet_excel"),
+    path("attendance/<int:sheet_id>/", views.attendance_sheet_view, name="attendance_sheet_view"),
+    path("consultant/", views.consultant_dashboard, name="consultant_dashboard"),
+
+    path("completed/<int:sheet_id>/", views.completed_sheet_view, name="completed_sheet_view"),
+    path("attendance/save/<int:sheet_id>/", views.save_attendance_data, name="save_attendance_data"),
+    path("auto-transfer/", views.auto_transfer_completed, name="auto_transfer_completed"),
+    path("attendance/save/<int:sheet_id>/", views.save_attendance_data, name="save_attendance_data"),
+]

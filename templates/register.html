@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    body{
+        background: linear-gradient(135deg, #0d6efd, #6610f2);
+        min-height: 100vh;
+    }
+
+    .register-card{
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .register-header{
+        background: linear-gradient(135deg, #0d6efd, #6610f2);
+        color: white;
+        padding: 25px;
+        text-align: center;
+    }
+
+    .register-body{
+        padding: 35px;
+        background: white;
+    }
+
+    .form-control, select{
+        border-radius: 12px !important;
+        padding: 12px !important;
+    }
+
+    .btn-register{
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 16px;
+    }
+</style>
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center align-items-center" style="min-height: 85vh;">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-lg border-0 register-card">
+
+                <!-- HEADER -->
+                <div class="register-header">
+                    <h3 class="fw-bold mb-1">Employee Registration</h3>
+                    <p class="mb-0">Create your account to continue</p>
+                </div>
+
+                <!-- BODY -->
+                <div class="register-body">
+
+                    <!-- FORM ERRORS DISPLAY -->
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>Please fix the following errors:</strong>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li><b>{{ field.label }}:</b> {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Employee ID</label>
+                            {{ form.emp_id }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Consultant Name</label>
+                            {{ form.consultant_name }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Company Email</label>
+                            {{ form.company_email }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Role</label>
+                            {{ form.role }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Password</label>
+                            {{ form.password1 }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-dark">Confirm Password</label>
+                            {{ form.password2 }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 fw-bold btn-register shadow-sm">
+                            Register
+                        </button>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted mb-0">
+                                Already have an account?
+                                <a href="{% url 'login' %}" class="fw-bold text-success text-decoration-none">
+                                    Login
+                                </a>
+                            </p>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+            <p class="text-center text-white mt-4 small">
+                © 2026 Technovalley Software | Staff Excel Management System
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

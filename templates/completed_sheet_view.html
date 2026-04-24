@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    body {
+        background: #f5f7fb;
+    }
+
+    .sheet-card {
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .sheet-header {
+        background: linear-gradient(90deg, #198754, #0f5132);
+        color: white;
+        padding: 18px;
+    }
+
+    .sheet-header h3 {
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .sheet-header p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    table th, table td {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 13px;
+        padding: 8px;
+        white-space: nowrap;
+    }
+
+    th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #212529 !important;
+        color: white;
+    }
+
+    input {
+        border: none;
+        outline: none;
+        width: 100%;
+        text-align: center;
+        background: transparent;
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    input:focus {
+        background: #d1e7dd;
+        border-radius: 8px;
+        border: 1px solid #198754;
+    }
+
+    .btn-custom {
+        border-radius: 12px;
+        padding: 9px 16px;
+        font-weight: bold;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        max-height: 500px;
+    }
+
+    .action-bar {
+        padding: 15px;
+        background: #ffffff;
+        border-top: 1px solid #eaeaea;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+
+    <!-- HEADER -->
+    <div class="sheet-card">
+
+        <div class="sheet-header d-flex justify-content-between align-items-center">
+            <div>
+                <h3>{{ sheet.sheet_name }}</h3>
+                <p>Sheet Type: <b>{{ sheet.sheet_type }}</b></p>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a href="{% url 'consultant_dashboard' %}" class="btn btn-dark btn-custom">
+                    ⬅ Back
+                </a>
+
+                <button class="btn btn-success btn-custom" onclick="addRow()">
+                    ➕ Add Row
+                </button>
+
+                <button class="btn btn-warning btn-custom text-white" onclick="saveSheet()">
+                    💾 Save Sheet
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="card-body bg-white p-3">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle" id="sheetTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Batch Name</th>
+                            <th>Student Name</th>
+                            <th>Course</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tableBody">
+                        {% for row in rows %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><input type="text" value="{{ row.col1|default:'' }}"></td>
+                            <td><input type="text" value="{{ row.col2|default:'' }}"></td>
+                            <td><input type="text" value="{{ row.col3|default:'' }}"></td>
+                            <td><input type="text" value="{{ row.col4|default:'' }}"></td>
+                            <td><input type="text" value="{{ row.col5|default:'' }}"></td>
+                            <td><input type="text" value="{{ row.col6|default:'' }}"></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td>1</td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <!-- FOOTER ACTION BAR -->
+        <div class="action-bar d-flex justify-content-end gap-2">
+            <button class="btn btn-success btn-custom" onclick="addRow()">
+                ➕ Add Row
+            </button>
+
+            <button class="btn btn-primary btn-custom" onclick="saveSheet()">
+                💾 Save Sheet
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function addRow() {
+        let tableBody = document.getElementById("tableBody");
+        let rowCount = tableBody.rows.length + 1;
+
+        let newRow = document.createElement("tr");
+
+        newRow.innerHTML = `
+            <td>${rowCount}</td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+        `;
+
+        tableBody.appendChild(newRow);
+    }
+
+    function saveSheet() {
+        let table = document.getElementById("sheetTable");
+        let rows = table.querySelectorAll("tbody tr");
+        let data = [];
+
+        rows.forEach(row => {
+            let inputs = row.querySelectorAll("input");
+            let rowData = [];
+
+            inputs.forEach(input => {
+                rowData.push(input.value);
+            });
+
+            data.push(rowData);
+        });
+
+        fetch("{% url 'save_sheet_data' sheet.id %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ data: data })
+        })
+        .then(response => response.json())
+        .then(result => {
+            alert(result.message);
+            location.reload();
+        })
+        .catch(error => {
+            alert("Error saving Completed Sheet!");
+            console.error(error);
+        });
+    }
+</script>
+
+{% endblock %}
